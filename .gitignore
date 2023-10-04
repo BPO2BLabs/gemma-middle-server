@@ -1,0 +1,5 @@
+.devcontainer
+ec2Connect
+
+*.env
+env
