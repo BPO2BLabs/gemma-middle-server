@@ -23,8 +23,7 @@ BUCKET_NAME=data['BUCKET_NAME']
 @app.route('/ping', methods=['GET'])
 def ping():
     response_body = {
-        "message": "Hello from gemma middle server ",
-        "variables": {"access_key_id": ACCESS_KEY_ID, "access_secret_key": ACCESS_SECRET_KEY, "bucket_name": BUCKET_NAME}
+        "message": "Hello from gemma middle server "
     }
     return jsonify(response_body), 200
 
