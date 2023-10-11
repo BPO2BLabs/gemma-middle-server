@@ -2,12 +2,23 @@
 from flask import Flask, request, jsonify
 import boto3
 import os
-
+import json
 app = Flask(__name__)
 
-ACCESS_KEY_ID=os.environ.get('ACCESS_KEY_ID')
-ACCESS_SECRET_KEY=os.environ.get('ACCESS_SECRET_KEY')
-BUCKET_NAME=os.environ.get('BUCKET_NAME')
+# ACCESS_KEY_ID=os.environ.get('ACCESS_KEY_ID')
+# ACCESS_SECRET_KEY=os.environ.get('ACCESS_SECRET_KEY')
+# BUCKET_NAME=os.environ.get('BUCKET_NAME')
+cwd = os.getcwd()
+env_path= cwd + '/.env.json'
+with open(env_path, 'r') as f:
+    # Load the JSON data into a Python object
+    data = json.load(f)
+
+# Access the data in the Python object
+
+ACCESS_KEY_ID=data['ACCESS_KEY_ID']
+ACCESS_SECRET_KEY=data['ACCESS_SECRET_KEY']
+BUCKET_NAME=data['BUCKET_NAME']
 
 @app.route('/ping', methods=['GET'])
 def ping():

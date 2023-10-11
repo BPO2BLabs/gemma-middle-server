@@ -10,6 +10,7 @@ To run the application, you will need to install the following requirements:
 - pip3
 - boto3
 - Flask
+- gunicorn
 
 You can install Python 3 and pip3 using your operating system's package manager. For example, on Ubuntu, you can run the following command:
   
