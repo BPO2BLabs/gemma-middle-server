@@ -17,8 +17,8 @@ def ping():
     }
     return jsonify(response_body), 200
 
-@app.route('/allobjects', methods=['POST'])
-def getObjects():
+@app.route('/audio/list', methods=['POST'])
+def getAllObjects():
 
     s3 = boto3.resource('s3', aws_access_key_id=ACCESS_KEY_ID, aws_secret_access_key=ACCESS_SECRET_KEY)
 
@@ -41,7 +41,7 @@ def getObjects():
     
     return jsonify(response_body), 200
 
-@app.route('/create', methods=['POST'])
+@app.route('/audio/create', methods=['POST'])
 def saveObject():
     # Get the file from the POST request
     file = request.files['file']
@@ -74,7 +74,7 @@ def saveObject():
 
     return jsonify({'message': 'File saved successfully', 'object': object_url }), 200
 
-@app.route('/update', methods=['PUT'])
+@app.route('/audio/update', methods=['PUT'])
 def updateObject():
     # Get the file from the PUT request
     fileKey =  request.form.get('file_key')
@@ -93,7 +93,7 @@ def updateObject():
 
     return jsonify({'message': 'File updated successfully' }), 200
 
-@app.route('/delete', methods=['DELETE'])
+@app.route('/audio/delete', methods=['DELETE'])
 def deleteObject():
     # Get the file from the PUT request
     fileKey =  request.form.get('file_key')
@@ -108,5 +108,14 @@ def deleteObject():
   
     return jsonify({'message': 'File deleted successfully' }), 200
   
+@app.route('/s3/events', methods=['POST'])
+def s3Events():
+    print('s3 events', request.json)
+    return 200
+    
+    
+
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)

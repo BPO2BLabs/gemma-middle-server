@@ -23,7 +23,7 @@ Once you have installed Python 3 and pip3, you can use pip3 to install the requi
 This will install the boto3 and Flask packages, which are required by the application:
   
   ```bash
-  pip3 install boto3 Flask
+  pip3 install boto3 Flask gunicorn
   ```
 
 Note that you may need to use `sudo` or run the commands as an administrator depending on your operating system and user permissions.
