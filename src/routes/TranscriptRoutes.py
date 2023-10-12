@@ -4,6 +4,9 @@ import os
 import boto3
 import json
 import uuid
+from dotenv import load_dotenv
+
+load_dotenv()
 
 main = Blueprint('language_blueprint', __name__)
 
