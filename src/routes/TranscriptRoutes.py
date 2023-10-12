@@ -8,8 +8,8 @@ main = Blueprint('language_blueprint', __name__)
 
 main.config['AUDIO_FOLDER'] = os.path.join("/home","ubuntu",".tmpaud")
 main.config['S3_BUCKET'] = os.getenv('BUCKET_NAME')
-main.config['S3_KEY'] = os.getenv('ACCESS_KEY')
-main.config['S3_SECRET'] = os.getenv('SECRET_KEY')
+main.config['S3_KEY'] = os.getenv('ACCESS_KEY_ID')
+main.config['S3_SECRET'] = os.getenv('ACCESS_SECRET_KEY')
 session = boto3.Session(
     aws_access_key_id=main.config['S3_KEY'],
     aws_secret_access_key=main.config['S3_SECRET']
