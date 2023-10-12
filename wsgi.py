@@ -1,7 +1,4 @@
-import sys
-sys.path.append('src/')
-
-from routes import app
+from index import app
 
 if __name__ == "main":
     app.run()
