@@ -46,10 +46,10 @@ def get_transcript():
 @main.route('/savetos3')
 def save_to_S3():
   files = request.files.getlist('filename')
-  unique_id = uuid.uuid4()
   userId = request.form.get('user_id')
   
   for file in files:
+    unique_id = uuid.uuid4()
     metadata_dict = {
         'user_id': userId,
         'original_name': file.filename,
@@ -59,6 +59,6 @@ def save_to_S3():
             'Metadata': metadata_dict
         })
     
-  data = {'msg':"Files uploaded successfully"}
+  data = {'msg':"Files uploaded successfully", 'status':'Carlos te amo'}
   res = jsonify(data), 200
   return res
