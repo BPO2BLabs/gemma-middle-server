@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
 
-main = Blueprint('language_blueprint', __name__)
+main = Blueprint('ping_blueprint', __name__)
 
 @main.route('/')
 def ping():

@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-main = Blueprint('language_blueprint', __name__)
+main = Blueprint('transcript_blueprint', __name__)
 
 AUDIO_FOLDER = os.path.join("/home","ubuntu",".tmpaud")
 S3_BUCKET = os.getenv('BUCKET_NAME')
