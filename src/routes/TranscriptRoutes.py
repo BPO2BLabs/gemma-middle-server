@@ -43,7 +43,7 @@ def get_transcript():
     res = json.dumps(resdict)
   return res
 
-@main.route('/savetos3')
+@main.route('/savetos3', methods=['POST'])
 def save_to_S3():
   files = request.files.getlist('filename')
   userId = request.form.get('user_id')
