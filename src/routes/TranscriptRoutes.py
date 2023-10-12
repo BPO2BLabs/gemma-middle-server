@@ -62,3 +62,22 @@ def save_to_S3():
   data = {'msg':"Files uploaded successfully", 'status':'Carlos te amo'}
   res = jsonify(data), 200
   return res
+
+@main.route('/savefile', methods=['POST'])
+def save_to_S3():
+  file = request.files['filename']
+  userId = request.form.get('user_id')
+  
+  unique_id = uuid.uuid4()
+  metadata_dict = {
+      'user_id': userId,
+      'original_name': file.filename,
+      'state': 'for_processing'
+  }
+  s3_client.upload_fileobj(file, S3_BUCKET, unique_id, ExtraArgs={
+          'Metadata': metadata_dict
+      })
+  
+  data = {'msg':"Files uploaded successfully", 'status':'Carlos te amo'}
+  res = jsonify(data), 200
+  return res
