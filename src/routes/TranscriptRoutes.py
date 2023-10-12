@@ -84,9 +84,3 @@ def save_file_to_S3():
   data = {'msg':"Files uploaded successfully", 'status':'Carlos te amo'}
   res = jsonify(data), 200
   return res
-
-@main.route('/env', methods=['GET'])
-def get_env():
-  data = {'bucket':os.getenv('BUCKET_NAME'), 'key':os.getenv('ACCESS_KEY_ID'), 'secret':os.getenv('ACCESS_SECRET_KEY')}
-  res = jsonify(data), 200
-  return res
