@@ -7,17 +7,17 @@ import uuid
 
 main = Blueprint('language_blueprint', __name__)
 
-main.config['AUDIO_FOLDER'] = os.path.join("/home","ubuntu",".tmpaud")
-main.config['S3_BUCKET'] = os.getenv('BUCKET_NAME')
-main.config['S3_KEY'] = os.getenv('ACCESS_KEY_ID')
-main.config['S3_SECRET'] = os.getenv('ACCESS_SECRET_KEY')
+AUDIO_FOLDER = os.path.join("/home","ubuntu",".tmpaud")
+S3_BUCKET = os.getenv('BUCKET_NAME')
+S3_KEY = os.getenv('ACCESS_KEY_ID')
+S3_SECRET = os.getenv('ACCESS_SECRET_KEY')
 session = boto3.Session(
-    aws_access_key_id=main.config['S3_KEY'],
-    aws_secret_access_key=main.config['S3_SECRET']
+    aws_access_key_id=S3_KEY,
+    aws_secret_access_key=S3_SECRET
 )
 s3_session = session.client('s3')
 s3_resource = session.resource('s3')
-s3_client = boto3.client('s3', aws_access_key_id=main.config['S3_KEY'], aws_secret_access_key=main.config['S3_SECRET'])
+s3_client = boto3.client('s3', aws_access_key_id=S3_KEY, aws_secret_access_key=S3_SECRET)
 
 @main.route('/')
 def get_transcript():
@@ -26,7 +26,7 @@ def get_transcript():
     files = request.files.getlist('filename')
     transcripts = []
     for file in files:
-      ROOT = os.path.join(main.config['AUDIO_FOLDER'],file.filename)
+      ROOT = os.path.join(AUDIO_FOLDER,file.filename)
       file.save(ROOT)    
       WhisperAI(ROOT)
       os.remove(ROOT)
@@ -55,7 +55,7 @@ def save_to_S3():
         'original_name': file.filename,
         'state': 'for_processing'
     }
-    s3_client.upload_fileobj(file, main.config['S3_BUCKET'], unique_id, ExtraArgs={
+    s3_client.upload_fileobj(file, S3_BUCKET, unique_id, ExtraArgs={
             'Metadata': metadata_dict
         })
     
