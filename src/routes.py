@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify
 import boto3
 import os
 import json
+import uuid
 app = Flask(__name__)
 
 # ACCESS_KEY_ID=os.environ.get('ACCESS_KEY_ID')
@@ -55,15 +56,14 @@ def getAllObjects():
 def saveObject():
     # Get the file from the POST request
     file = request.files['file']
-
+    unique_id = uuid.uuid4()
     # Get the metadata labels from the POST request
-    userName = request.form.get('user_name')
     userId = request.form.get('user_id')
 
     #define the metadata dictionary
     metadata_dict = {
-        'user_name': userName,
         'user_id': userId,
+        'original_name': file.filename,
         'state': 'for_processing'
     }
 
@@ -75,7 +75,7 @@ def saveObject():
     s3.upload_fileobj(
         file,
         BUCKET_NAME,
-        file.filename,
+        str(unique_id),
         ExtraArgs={
             'Metadata': metadata_dict
         }

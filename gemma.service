@@ -1,0 +1,11 @@
+[Unit]
+Description=Gunicorn instance for gemma ai
+After=network.target
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/apps/gemma-middle-server
+ExecStart=gunicorn -b 0.0.0.0:80 wsgi:app
+Restart=always
+[Install]
+WantedBy=multi-user.target
