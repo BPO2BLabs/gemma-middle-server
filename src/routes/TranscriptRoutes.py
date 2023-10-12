@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from src.utils.WhisperAI import whisperAI
+from src.utils.WhisperAI import WhisperAI
 import os
 import boto3
 import json
@@ -28,7 +28,7 @@ def get_transcript():
     for file in files:
       ROOT = os.path.join(main.config['AUDIO_FOLDER'],file.filename)
       file.save(ROOT)    
-      whisperAI(ROOT)
+      WhisperAI(ROOT)
       os.remove(ROOT)
       with open(f"{ROOT[:-4]}.json", 'r') as file_load:
         content_as_string = file_load.read()
