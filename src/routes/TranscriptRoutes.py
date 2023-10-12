@@ -3,6 +3,7 @@ from src.utils.WhisperAI import whisperAI
 import os
 import boto3
 import json
+import uuid
 
 main = Blueprint('language_blueprint', __name__)
 
@@ -45,12 +46,19 @@ def get_transcript():
 @main.route('/savetos3')
 def save_to_S3():
   files = request.files.getlist('filename')
+  unique_id = uuid.uuid4()
+  userId = request.form.get('user_id')
+  
   for file in files:
-    ROOT = os.path.join(main.config['AUDIO_FOLDER'],file.filename)
-    file.save(ROOT)
-    s3_client.upload_file(ROOT, main.config['S3_BUCKET'], file.filename)
-    os.remove(ROOT)
-
+    metadata_dict = {
+        'user_id': userId,
+        'original_name': file.filename,
+        'state': 'for_processing'
+    }
+    s3_client.upload_fileobj(file, main.config['S3_BUCKET'], unique_id, ExtraArgs={
+            'Metadata': metadata_dict
+        })
+    
   data = {'msg':"Files uploaded successfully"}
-  res = jsonify(data)
+  res = jsonify(data), 200
   return res
