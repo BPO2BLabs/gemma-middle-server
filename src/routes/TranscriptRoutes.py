@@ -52,7 +52,7 @@ def save_to_S3():
   userId = request.form.get('user_id')
   
   for file in files:
-    unique_id = uuid.uuid4()
+    unique_id = str(uuid.uuid4())
     metadata_dict = {
         'user_id': userId,
         'original_name': file.filename,
@@ -71,7 +71,7 @@ def save_file_to_S3():
   file = request.files['filename']
   userId = request.form.get('user_id')
   
-  unique_id = uuid.uuid4()
+  unique_id = str(uuid.uuid4())
   metadata_dict = {
       'user_id': userId,
       'original_name': file.filename,
