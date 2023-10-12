@@ -20,21 +20,26 @@ s3_client = boto3.client('s3', aws_access_key_id=main.config['S3_KEY'], aws_secr
 
 @main.route('/')
 def get_transcript():
-  files = request.files.getlist('filename')
-  transcripts = []
-  for file in files:
-    ROOT = os.path.join(main.config['AUDIO_FOLDER'],file.filename)
-    file.save(ROOT)    
-    whisperAI(ROOT)
-    os.remove(ROOT)
-    with open(f"{ROOT[:-4]}.json", 'r') as file_load:
-      content_as_string = file_load.read()
-      data = json.loads(content_as_string)
-      transcripts.append(data)
+  isAvailable = False
+  if isAvailable:
+    files = request.files.getlist('filename')
+    transcripts = []
+    for file in files:
+      ROOT = os.path.join(main.config['AUDIO_FOLDER'],file.filename)
+      file.save(ROOT)    
+      whisperAI(ROOT)
+      os.remove(ROOT)
+      with open(f"{ROOT[:-4]}.json", 'r') as file_load:
+        content_as_string = file_load.read()
+        data = json.loads(content_as_string)
+        transcripts.append(data)
 
 
-  resdict = {'transcripts':transcripts}
-  res = json.dumps(resdict)
+    resdict = {'transcripts':transcripts}
+    res = json.dumps(resdict)
+  else:
+    resdict = {'transcripts':[]}
+    res = json.dumps(resdict)
   return res
 
 @main.route('/savetos3')
