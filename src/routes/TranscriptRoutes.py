@@ -81,6 +81,6 @@ def save_file_to_S3():
           'Metadata': metadata_dict
       })
   
-  data = {'msg':"Files uploaded successfully", 'status':'Carlos te amo'}
+  data = {'msg':"Files uploaded successfully"}
   res = jsonify(data), 200
   return res
