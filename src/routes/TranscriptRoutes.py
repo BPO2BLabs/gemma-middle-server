@@ -5,6 +5,7 @@ import boto3
 import json
 import uuid
 from dotenv import load_dotenv
+import requests
 
 load_dotenv()
 
@@ -21,6 +22,14 @@ session = boto3.Session(
 s3_session = session.client('s3')
 s3_resource = session.resource('s3')
 s3_client = boto3.client('s3', aws_access_key_id=S3_KEY, aws_secret_access_key=S3_SECRET)
+
+ID_API = os.getenv('ID_API')
+BEARER = os.getenv('BEARER')
+url = f"https://api.runpod.ai/v2/{ID_API}/run"
+headers = {
+    "Content-Type": "application/json",
+    "Authorization": f"Bearer {BEARER}"
+}
 
 @main.route('/')
 def get_transcript():
@@ -62,6 +71,7 @@ def save_to_S3():
             'Metadata': metadata_dict
         })
     
+  
   data = {'msg':"Files uploaded successfully"}
   res = jsonify(data), 200
   return res
@@ -71,16 +81,30 @@ def save_file_to_S3():
   file = request.files['filename']
   userId = request.form.get('user_id')
   
-  unique_id = str(uuid.uuid4())+".mp3"
+  unique_id = str(uuid.uuid4())
+  folder_s3 = f"{unique_id}/{unique_id}.mp3"
   metadata_dict = {
       'user_id': userId,
       'original_name': file.filename,
       'state': 'for_processing'
   }
-  s3_client.upload_fileobj(file, "gemma-middle-storage", unique_id, ExtraArgs={
+  s3_client.upload_fileobj(file, "gemma-middle-storage", folder_s3, ExtraArgs={
           'Metadata': metadata_dict
       })
   
+  data = {
+      "input": {
+          "folder": unique_id 
+      }
+  }
+  response = requests.post(url, json=data, headers=headers)
+
+  print(response)
+
+  if response.status_code == 200:
+      print("Respuesta exitosa:", response.json())
+  else:
+      print("Error en la solicitud:", response.status_code, response.text)
   data = {'msg':"Files uploaded successfully"}
   res = jsonify(data), 200
   return res

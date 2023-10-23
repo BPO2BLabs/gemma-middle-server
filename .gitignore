@@ -5,3 +5,11 @@ __pycache__/
 *.py[cod]
 
 .pytest_cache/
+
+.devcontainer
+ec2Connect
+
+*.env
+env
+nginx.conf
+.env.json
