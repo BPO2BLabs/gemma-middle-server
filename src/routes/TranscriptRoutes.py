@@ -34,6 +34,8 @@ headers = {
     "Authorization": f"Bearer {BEARER}"
 }
 
+url_backend = " https://back.connectup.cloud"
+
 @main.route('/')
 def get_transcript():
   isAvailable = False
@@ -81,11 +83,21 @@ def save_to_S3():
 
 @main.route('/savefile', methods=['POST'])
 def save_file_to_S3():
-  token = request.headers.get('Authorization').split(" ")[1]
+  auth_header = request.headers.get('Authorization')
+  if not auth_header:
+    return jsonify({'msg': 'Missing Authorization Header'}), 401
+  token = auth_header.split(" ")[1]
+  headers_request = {'Authorization': f'Bearer {token}'}
+  response = requests.get(f"{url_backend}/auth", headers=headers_request)
+  if response.status_code != 200:
+    return jsonify({'msg': 'Invalid Token'}), 401
+
   file = request.files['filename']
-  userId = request.form.get('user_id')
+  decoded_token = jwt.decode(token, BACKEND_SECRET_KEY, algorithms=["HS256"])   
+  userId = decoded_token['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']
+  print(userId)
   print(token)
-  decoded_token = jwt.decode(token, BACKEND_SECRET_KEY, algorithms=["HS256"])    
+   
   
   # Obtiene el username o userid desde el token decodificado
   print(decoded_token)
