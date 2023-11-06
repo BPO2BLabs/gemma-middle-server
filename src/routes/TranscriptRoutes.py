@@ -86,6 +86,7 @@ def save_file_to_S3():
   userId = request.form.get('user_id')
 
   decoded_token = jwt.decode(token, BACKEND_SECRET_KEY, algorithms=["HS256"])    
+  print(token)
   # Obtiene el username o userid desde el token decodificado
   print(decoded_token)
   #username = decoded_token.get('username')
