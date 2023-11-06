@@ -6,10 +6,13 @@ import json
 import uuid
 from dotenv import load_dotenv
 import requests
+import jwt
 
 load_dotenv()
 
 main = Blueprint('transcript_blueprint', __name__)
+
+BACKEND_SECRET_KEY = os.getenv('BACKEND_SECRET_KEY')
 
 AUDIO_FOLDER = os.path.join("/home","ubuntu",".tmpaud")
 S3_BUCKET = os.getenv('BUCKET_NAME')
@@ -78,11 +81,18 @@ def save_to_S3():
 
 @main.route('/savefile', methods=['POST'])
 def save_file_to_S3():
+  token = request.headers.get('Authorization')
   file = request.files['filename']
   userId = request.form.get('user_id')
+
+  decoded_token = jwt.decode(token, BACKEND_SECRET_KEY, algorithms=["HS256"])    
+  # Obtiene el username o userid desde el token decodificado
+  print(decoded_token)
+  #username = decoded_token.get('username')
+  #userid = decoded_token.get('userid')
   
   unique_id = str(uuid.uuid4())
-  folder_s3 = f"{unique_id}/{unique_id}.mp3"
+  folder_s3 = f"{unique_id}/{file.filename}"
   metadata_dict = {
       'user_id': userId,
       'original_name': file.filename,
