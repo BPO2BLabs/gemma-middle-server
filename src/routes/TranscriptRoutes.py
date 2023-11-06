@@ -81,7 +81,7 @@ def save_to_S3():
 
 @main.route('/savefile', methods=['POST'])
 def save_file_to_S3():
-  token = request.headers.get('Authorization')
+  token = request.headers.get('Authorization').split(" ")[1]
   file = request.files['filename']
   userId = request.form.get('user_id')
   print(token)
