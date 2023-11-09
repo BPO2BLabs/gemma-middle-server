@@ -112,7 +112,8 @@ def save_file_to_S3():
     
   data_runpod = {
       "input": {
-          "folder": unique_id 
+          "folder": unique_id,
+          "token_user": token
       }
   }
   response = requests.post(url_runpod, json=data_runpod, headers=headers_runpod)
