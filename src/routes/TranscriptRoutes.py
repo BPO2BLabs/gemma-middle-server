@@ -28,8 +28,8 @@ s3_client = boto3.client('s3', aws_access_key_id=S3_KEY, aws_secret_access_key=S
 
 ID_API = os.getenv('ID_API')
 BEARER = os.getenv('BEARER')
-url = f"https://api.runpod.ai/v2/{ID_API}/run"
-headers = {
+url_runpod = f"https://api.runpod.ai/v2/{ID_API}/run"
+headers_runpod = {
     "Content-Type": "application/json",
     "Authorization": f"Bearer {BEARER}"
 }
@@ -92,37 +92,30 @@ def save_file_to_S3():
   if response.status_code != 200:
     return jsonify({'msg': 'Invalid Token'}), 401
 
-  file = request.files['filename']
+  #file = request.files['filename']
+  files = request.files.getlist('filename')
   decoded_token = jwt.decode(token, BACKEND_SECRET_KEY, algorithms=["HS256"])   
   userId = decoded_token['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']
-  print(userId)
-  print(token)
-   
-  
-  # Obtiene el username o userid desde el token decodificado
-  print(decoded_token)
-  #username = decoded_token.get('username')
-  #userid = decoded_token.get('userid')
   
   unique_id = str(uuid.uuid4())
-  folder_s3 = f"{unique_id}/{file.filename}"
-  metadata_dict = {
-      'user_id': userId,
-      'original_name': file.filename,
-      'state': 'for_processing'
-  }
-  s3_client.upload_fileobj(file, "gemma-middle-storage", folder_s3, ExtraArgs={
-          'Metadata': metadata_dict
-      })
-  
-  data = {
+  for file in files:
+    unique_id_name = str(uuid.uuid4())
+    folder_s3 = f"{unique_id}/{unique_id_name}.mp3"
+    metadata_dict = {
+        'user_id': userId,
+        'original_name': file.filename,
+        'state': 'for_processing'
+    }
+    s3_client.upload_fileobj(file, "gemma-middle-storage", folder_s3, ExtraArgs={
+            'Metadata': metadata_dict
+        })
+    
+  data_runpod = {
       "input": {
           "folder": unique_id 
       }
   }
-  response = requests.post(url, json=data, headers=headers)
-
-  print(response)
+  response = requests.post(url_runpod, json=data_runpod, headers=headers_runpod)
 
   if response.status_code == 200:
       print("Respuesta exitosa:", response.json())

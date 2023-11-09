@@ -1,10 +1,12 @@
 from flask import Flask
+from flask_cors import CORS
 
 # Routes
 from .routes import TranscriptRoutes
 from .routes import PingRoutes
 
 app = Flask(__name__)
+CORS(app)
 
 
 def init_app(config):
