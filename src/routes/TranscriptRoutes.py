@@ -101,6 +101,7 @@ def save_file_to_S3():
   for file in files:
     unique_id_name = str(uuid.uuid4())
     folder_s3 = f"{unique_id}/{unique_id_name}.mp3"
+    print(file.filename)
     metadata_dict = {
         'user_id': userId,
         'original_name': file.filename,
