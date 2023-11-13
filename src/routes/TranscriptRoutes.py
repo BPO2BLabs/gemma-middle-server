@@ -106,9 +106,13 @@ def save_file_to_S3():
         'original_name': file.filename,
         'state': 'for_processing'
     }
-    s3_client.upload_fileobj(file, "gemma-middle-storage", folder_s3, ExtraArgs={
+    try:
+      s3_client.upload_fileobj(file, "gemma-middle-storage", folder_s3, ExtraArgs={
             'Metadata': metadata_dict
         })
+    except Exception as e:
+      print(e)
+      return jsonify({'msg': 'Error uploading file'}), 500
     
   data_runpod = {
       "input": {
