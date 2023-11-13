@@ -94,7 +94,8 @@ def save_file_to_S3():
 
   #file = request.files['filename']
   files = request.files.getlist('filename')
-  print(files)
+  if len(files) == 0:
+    files.append(request.files['filename'])
   decoded_token = jwt.decode(token, BACKEND_SECRET_KEY, algorithms=["HS256"])   
   userId = decoded_token['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']
   
@@ -102,7 +103,6 @@ def save_file_to_S3():
   for file in files:
     unique_id_name = str(uuid.uuid4())
     folder_s3 = f"{unique_id}/{unique_id_name}.mp3"
-    print(file.filename)
     metadata_dict = {
         'user_id': userId,
         'original_name': file.filename,
