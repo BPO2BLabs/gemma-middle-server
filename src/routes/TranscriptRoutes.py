@@ -94,7 +94,7 @@ def save_file_to_S3():
 
   #file = request.files['filename']
   files = request.files.getlist('filename')
-  print(request)
+  print(request.__dict__)
   if len(files) == 0:
     files.append(request.files['filename'])
   decoded_token = jwt.decode(token, BACKEND_SECRET_KEY, algorithms=["HS256"])   
