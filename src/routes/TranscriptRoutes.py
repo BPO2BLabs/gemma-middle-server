@@ -7,6 +7,7 @@ import uuid
 from dotenv import load_dotenv
 import requests
 import jwt
+import time
 
 load_dotenv()
 
@@ -101,6 +102,7 @@ def save_file_to_S3():
   
   unique_id = str(uuid.uuid4())
   for file in files:
+    start_time = time.time()
     folder_s3 = f"{unique_id}/{file.filename}"
     metadata_dict = {
         'user_id': userId,
@@ -114,6 +116,7 @@ def save_file_to_S3():
     except Exception as e:
       print(e)
       return jsonify({'msg': 'Error uploading file'}), 500
+    print("--- %s seconds ---" % (time.time() - start_time))
     
   data_runpod = {
       "input": {
