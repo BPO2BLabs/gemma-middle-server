@@ -93,7 +93,7 @@ def save_file_to_S3():
   response = requests.get(f"{url_backend}/auth", headers=headers_request)
   if response.status_code != 200:
     return jsonify({'msg': 'Invalid Token'}), 401
-
+  print("Auth --- %s seconds ---" % (time.time() - time_init))
   #file = request.files['filename']
   files = request.files.getlist('filename')
   if len(files) == 0:
@@ -101,6 +101,8 @@ def save_file_to_S3():
   decoded_token = jwt.decode(token, BACKEND_SECRET_KEY, algorithms=["HS256"])   
   userId = decoded_token['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']
   
+  print("Files --- %s seconds ---" % (time.time() - time_init))
+
   unique_id = str(uuid.uuid4())
   for file in files:
     start_time = time.time()
@@ -118,7 +120,7 @@ def save_file_to_S3():
       print(e)
       return jsonify({'msg': 'Error uploading file'}), 500
     print("Uploading to S3--- %s seconds ---" % (time.time() - start_time))
-
+  print("Files uploaded--- %s seconds ---" % (time.time() - time_init))
   time_runpod = time.time() 
   data_runpod = {
       "input": {
