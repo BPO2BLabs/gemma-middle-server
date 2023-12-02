@@ -84,6 +84,7 @@ def save_to_S3():
 
 @main.route('/savefile', methods=['POST'])
 def save_file_to_S3():
+  time_init = time.time()
   auth_header = request.headers.get('Authorization')
   if not auth_header:
     return jsonify({'msg': 'Missing Authorization Header'}), 401
@@ -134,4 +135,5 @@ def save_file_to_S3():
   
   data = {'msg':"Files uploaded successfully"}
   res = jsonify(data), 200
+  print("--- %s seconds ---" % (time.time() - time_init))
   return res
