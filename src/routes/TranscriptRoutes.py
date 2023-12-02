@@ -117,7 +117,7 @@ def save_file_to_S3():
     except Exception as e:
       print(e)
       return jsonify({'msg': 'Error uploading file'}), 500
-    print("--- %s seconds ---" % (time.time() - start_time))
+    print("Uploading to S3--- %s seconds ---" % (time.time() - start_time))
     
   data_runpod = {
       "input": {
@@ -135,5 +135,5 @@ def save_file_to_S3():
   
   data = {'msg':"Files uploaded successfully"}
   res = jsonify(data), 200
-  print("--- %s seconds ---" % (time.time() - time_init))
+  print("All process --- %s seconds ---" % (time.time() - time_init))
   return res
