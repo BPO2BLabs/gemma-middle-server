@@ -127,6 +127,8 @@ def save_file_to_S3():
       print("Respuesta exitosa:", response.json())
   else:
       print("Error en la solicitud:", response.status_code, response.text)
+      return jsonify({'msg': 'Error in Runpod'}), 500
+  
   data = {'msg':"Files uploaded successfully"}
   res = jsonify(data), 200
   return res
