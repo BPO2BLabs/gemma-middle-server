@@ -118,7 +118,8 @@ def save_file_to_S3():
       print(e)
       return jsonify({'msg': 'Error uploading file'}), 500
     print("Uploading to S3--- %s seconds ---" % (time.time() - start_time))
-    
+
+  time_runpod = time.time() 
   data_runpod = {
       "input": {
           "folder": unique_id,
@@ -132,7 +133,7 @@ def save_file_to_S3():
   else:
       print("Error en la solicitud:", response.status_code, response.text)
       return jsonify({'msg': 'Error in Runpod'}), 500
-  
+  print("Runpod --- %s seconds ---" % (time.time() - time_runpod))
   data = {'msg':"Files uploaded successfully"}
   res = jsonify(data), 200
   print("All process --- %s seconds ---" % (time.time() - time_init))
