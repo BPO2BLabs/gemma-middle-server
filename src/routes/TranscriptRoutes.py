@@ -94,9 +94,8 @@ def save_file_to_S3():
 
   #file = request.files['filename']
   files = request.files.getlist('filename')
-  print(request.__dict__)
   if len(files) == 0:
-    files.append(request.files['filename'])
+    return jsonify({'msg': 'No files uploaded'}), 400
   decoded_token = jwt.decode(token, BACKEND_SECRET_KEY, algorithms=["HS256"])   
   userId = decoded_token['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']
   
