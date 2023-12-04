@@ -117,6 +117,7 @@ def save_file_to_S3():
 
   for file in files:
     start_time = time.time()
+    print({'Transcripts': [{"Name":file.filename}]})
     res_validation = requests.post(f"{url_backend_stage}/Transcript/ValidateExistingTranscript", json={'Transcripts': [{"Name":file.filename}]}, headers=headers_request)
     print(res_validation.json())
     if res_validation.status_code == 200 and res_validation.json().get('data'):
