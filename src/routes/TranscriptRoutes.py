@@ -36,6 +36,7 @@ headers_runpod = {
 }
 
 url_backend = " https://back.connectup.cloud"
+url_backend_stage = "https://stage-test.connectup.cloud"
 
 @main.route('/')
 def get_transcript():
@@ -113,8 +114,12 @@ def save_file_to_S3():
   print("Files --- %s seconds ---" % (time.time() - time_init))
 
   unique_id = f"uploads/{str(uuid.uuid4())}"
+
   for file in files:
     start_time = time.time()
+    res_validation = requests.post(f"{url_backend_stage}/Transcript/ValidateExistingTranscript", json={'Transcripts': [{"Name":file.filename}]}, headers=headers_request)
+    if res_validation.status_code == 200 and res_validation.json().get('data'):
+     return jsonify({'msg': 'Transcript already exists'}), 400
     folder_s3 = f"{unique_id}/{file.filename}"
     metadata_dict = {
         'user_id': userId,
