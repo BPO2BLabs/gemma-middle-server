@@ -117,7 +117,7 @@ def save_file_to_S3():
 
   for file in files:
     start_time = time.time()
-    json_name_validation : {
+    json_name_validation = {
     "Transcripts" : [
         {
             "Name" : "Nickname_CALL4.mp3"
