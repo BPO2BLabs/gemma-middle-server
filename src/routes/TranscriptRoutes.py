@@ -127,7 +127,7 @@ def save_file_to_S3():
         }
       ]
     }
-    res_validation = requests.post(f"{url_backend_stage}/Transcript/ValidateExistingTranscript", json=json_name_validation, headers=headers_request)
+    res_validation = requests.post(f"{url_backend_stage}/Transcript/ValidateExistingTranscript", json=json_name_validation)
     print(res_validation.json())
     if res_validation.status_code == 200 and res_validation.json().get('data'):
      return jsonify({'msg': 'Transcript already exists'}), 400
