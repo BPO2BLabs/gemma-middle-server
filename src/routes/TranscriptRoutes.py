@@ -95,12 +95,21 @@ def save_file_to_S3():
     return jsonify({'msg': 'Invalid Token'}), 401
   print("Auth --- %s seconds ---" % (time.time() - time_init))
   #file = request.files['filename']
+  time_req = time.time()
   files = request.files.getlist('filename')
+  print("Request getlist --- %s seconds ---" % (time.time() - time_req))
+  time_if = time.time() 
   if len(files) == 0:
     return jsonify({'msg': 'No files uploaded'}), 400
-  decoded_token = jwt.decode(token, BACKEND_SECRET_KEY, algorithms=["HS256"])   
-  userId = decoded_token['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']
+  print("If --- %s seconds ---" % (time.time() - time_if))
   
+  time_decode = time.time()
+  decoded_token = jwt.decode(token, BACKEND_SECRET_KEY, algorithms=["HS256"])   
+  print("Decode --- %s seconds ---" % (time.time() - time_decode))
+
+  time_user = time.time()
+  userId = decoded_token['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']
+  print("User --- %s seconds ---" % (time.time() - time_user))
   print("Files --- %s seconds ---" % (time.time() - time_init))
 
   unique_id = str(uuid.uuid4())
@@ -139,4 +148,5 @@ def save_file_to_S3():
   data = {'msg':"Files uploaded successfully"}
   res = jsonify(data), 200
   print("All process --- %s seconds ---" % (time.time() - time_init))
+  print("--------------------")
   return res
