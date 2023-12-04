@@ -94,13 +94,16 @@ def save_file_to_S3():
   if response.status_code != 200:
     return jsonify({'msg': 'Invalid Token'}), 401
   print("Auth --- %s seconds ---" % (time.time() - time_init))
-  #file = request.files['filename']
+  
   time_req = time.time()
-  files = request.files.getlist('filename')
+  file = request.files['filename']
+  #files = request.files.getlist('filename')
   print("Request getlist --- %s seconds ---" % (time.time() - time_req))
   time_if = time.time() 
-  if len(files) == 0:
-    return jsonify({'msg': 'No files uploaded'}), 400
+  #if len(files) == 0:
+  #  return jsonify({'msg': 'No files uploaded'}), 400
+  if not file:
+    return jsonify({'msg': 'No file uploaded'}), 400
   print("If --- %s seconds ---" % (time.time() - time_if))
   
   time_decode = time.time()
@@ -113,22 +116,22 @@ def save_file_to_S3():
   print("Files --- %s seconds ---" % (time.time() - time_init))
 
   unique_id = str(uuid.uuid4())
-  for file in files:
-    start_time = time.time()
-    folder_s3 = f"{unique_id}/{file.filename}"
-    metadata_dict = {
-        'user_id': userId,
-        'original_name': file.filename,
-        'state': 'for_processing'
-    }
-    try:
-      s3_client.upload_fileobj(file, "gemma-middle-storage", folder_s3, ExtraArgs={
-            'Metadata': metadata_dict
-        })
-    except Exception as e:
-      print(e)
-      return jsonify({'msg': 'Error uploading file'}), 500
-    print("Uploading to S3--- %s seconds ---" % (time.time() - start_time))
+  
+  start_time = time.time()
+  folder_s3 = f"{unique_id}/{file.filename}"
+  metadata_dict = {
+      'user_id': userId,
+      'original_name': file.filename,
+      'state': 'for_processing'
+  }
+  try:
+    s3_client.upload_fileobj(file, "gemma-middle-storage", folder_s3, ExtraArgs={
+          'Metadata': metadata_dict
+      })
+  except Exception as e:
+    print(e)
+    return jsonify({'msg': 'Error uploading file'}), 500
+  print("Uploading to S3--- %s seconds ---" % (time.time() - start_time))
   print("Files uploaded--- %s seconds ---" % (time.time() - time_init))
   time_runpod = time.time() 
   data_runpod = {
