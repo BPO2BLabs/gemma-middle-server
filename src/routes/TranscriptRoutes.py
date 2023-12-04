@@ -117,8 +117,7 @@ def save_file_to_S3():
 
   for file in files:
     start_time = time.time()
-    headers_request_test = {'Authorization': f'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjhiMzY1ZTAxLTgxNzctNDEyMC1hZDEwLWQ0MTFhZTJiOTU4OSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJhbmRyZXMuZmFjdW5kb0Bjb25uZWN0dXB3ZWIuY29tIiwianRpIjoiMTgxYzI1MGUtYzE0Ni00OTg5LTgyNDItYTEwYzEyYTQ3NGVhIiwiUm9sZSI6IntcIklkXCI6XCI3Y2YyYzFiMi02ODkzLTRiZTUtYjQyMy0yODUwNzJhZTYzNjdcIixcIk5hbWVcIjpcIlN5c3RlbUFkbWluXCIsXCJEZXNjcmlwdGlvblwiOm51bGwsXCJwZXJtaXNzaW9uc1wiOm51bGwsXCJDb21wYW55SWRcIjowLFwiVXNlcnNDb3VudFwiOjB9IiwiZXhwIjoxNzAxOTYwMTU3fQ.c85risq7WTdLQCl3zk9c5sODFeQpA_4YROoU57AIddQ'}
-    res_validation = requests.post(f"{url_backend_stage}/Transcript/ValidateExistingTranscript", json={"Transcripts":[{"Name": file.filename}]}, headers=headers_request_test)
+    res_validation = requests.post(f"{url_backend_stage}/Transcript/ValidateExistingTranscript", json={"Transcripts":[{"Name": file.filename}]}, headers=headers_request)
     print(res_validation.json())
     if res_validation.status_code == 200 and res_validation.json().get('data'):
      return jsonify({'msg': 'Transcript already exists'}), 400
