@@ -117,8 +117,17 @@ def save_file_to_S3():
 
   for file in files:
     start_time = time.time()
-    print({'Transcripts': [{"Name":file.filename}]})
-    res_validation = requests.post(f"{url_backend_stage}/Transcript/ValidateExistingTranscript", json={'Transcripts': [{"Name":file.filename}]}, headers=headers_request)
+    json_name_validation : {
+    "Transcripts" : [
+        {
+            "Name" : "Nickname_CALL4.mp3"
+        },
+        {
+            "Name" : "Nickname_CALL8.mp3"
+        }
+      ]
+    }
+    res_validation = requests.post(f"{url_backend_stage}/Transcript/ValidateExistingTranscript", json=json_name_validation, headers=headers_request)
     print(res_validation.json())
     if res_validation.status_code == 200 and res_validation.json().get('data'):
      return jsonify({'msg': 'Transcript already exists'}), 400
