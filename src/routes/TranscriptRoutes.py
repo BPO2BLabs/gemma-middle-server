@@ -112,7 +112,7 @@ def save_file_to_S3():
   print("User --- %s seconds ---" % (time.time() - time_user))
   print("Files --- %s seconds ---" % (time.time() - time_init))
 
-  unique_id = str(uuid.uuid4())
+  unique_id = f"uploads/{str(uuid.uuid4())}"
   for file in files:
     start_time = time.time()
     folder_s3 = f"{unique_id}/{file.filename}"
