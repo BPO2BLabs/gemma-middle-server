@@ -121,7 +121,8 @@ def save_file_to_S3():
     res_validation = requests.post(f"{url_backend}/Transcript/ValidateExistingTranscript", json={"Transcripts":[{"Name": file.filename}]}, headers=headers_request)
     print(res_validation.json())
     if res_validation.status_code == 200 and res_validation.json().get('data'):
-     return jsonify({'msg': 'Transcript already exists', 'names': names_exist.append(file.filename)}), 400
+     names_exist.append(file.filename)
+     return jsonify({'msg': 'Transcript already exists', 'names': names_exist}), 400
     elif res_validation.status_code != 200:
       return jsonify({'msg': 'Error in ValidateExistingTranscript'}), 500
     folder_s3 = f"{unique_id}/{file.filename}"
