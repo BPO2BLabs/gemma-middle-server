@@ -122,6 +122,7 @@ def save_file_to_S3():
     print(res_validation.json())
     if res_validation.status_code == 200 and res_validation.json().get('data'):
      names_exist.append(file.filename)
+     print(names_exist)
      return jsonify({'msg': 'Transcript already exists', 'names': names_exist}), 400
     elif res_validation.status_code != 200:
       return jsonify({'msg': 'Error in ValidateExistingTranscript'}), 500
