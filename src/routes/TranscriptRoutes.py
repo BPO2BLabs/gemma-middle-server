@@ -35,8 +35,7 @@ headers_runpod = {
     "Authorization": f"Bearer {BEARER}"
 }
 
-url_backend = " https://back.connectup.cloud"
-url_backend_stage = "https://stage-test.connectup.cloud"
+URL_BACKEND = os.getenv('URL_BACKEND')
 
 @main.route('/')
 def get_transcript():
@@ -91,7 +90,7 @@ def save_file_to_S3():
     return jsonify({'msg': 'Missing Authorization Header'}), 401
   token = auth_header.split(" ")[1]
   headers_request = {'Authorization': f'Bearer {token}'}
-  response = requests.get(f"{url_backend}/auth", headers=headers_request)
+  response = requests.get(f"{URL_BACKEND}/auth", headers=headers_request)
   if response.status_code != 200:
     return jsonify({'msg': 'Invalid Token'}), 401
   print("Auth --- %s seconds ---" % (time.time() - time_init))
@@ -118,7 +117,7 @@ def save_file_to_S3():
   for file in files:
     start_time = time.time()
     print(file.filename)
-    res_validation = requests.post(f"{url_backend}/Transcript/ValidateExistingTranscript", json={"Transcripts":[{"Name": file.filename}]}, headers=headers_request)
+    res_validation = requests.post(f"{URL_BACKEND}/Transcript/ValidateExistingTranscript", json={"Transcripts":[{"Name": file.filename}]}, headers=headers_request)
     print(res_validation.json())
     if res_validation.status_code == 200 and res_validation.json().get('data'):
      names_exist.append(file.filename)
