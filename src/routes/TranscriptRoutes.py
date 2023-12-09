@@ -84,6 +84,7 @@ def save_to_S3():
 
 @main.route('/savefile', methods=['POST'])
 def save_file_to_S3():
+  print(S3_BUCKET)
   time_init = time.time()
   auth_header = request.headers.get('Authorization')
   if not auth_header:
