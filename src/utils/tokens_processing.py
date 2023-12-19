@@ -34,7 +34,7 @@ def modify_alg_in_token(token, secret_key):
     # Re-encode header and join with the rest of the token
     new_token = jwt.encode(payload, secret_key, algorithm=header['alg'], headers=header)
     
-    return new_token
+    return new_token, header['alg']
 
 # Mapping URL to algorithm
 

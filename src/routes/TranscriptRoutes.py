@@ -102,23 +102,18 @@ def save_file_to_S3():
   time_if = time.time() 
   if len(files) == 0:
     return jsonify({'msg': 'No files uploaded'}), 400
-  print("If --- %s seconds ---" % (time.time() - time_if))
-  
+  print("If --- %s seconds ---" % (time.time() - time_if))  
   time_decode = time.time()
-  alg_token = get_alg_from_token(token)
-  if alg_token.startswith("http://") or alg_token.startswith("https://"):
-      token = modify_alg_in_token(token, BACKEND_SECRET_KEY)
-      print("Token modificado:", token)
-  decoded_token = jwt.decode(token, BACKEND_SECRET_KEY, algorithms=["HS256"])
   try:
     alg_token = get_alg_from_token(token)
     if alg_token.startswith("http://") or alg_token.startswith("https://"):
-      token = modify_alg_in_token(token)
-      print("Token modificado:", token)
-    decoded_token = jwt.decode(token, BACKEND_SECRET_KEY, algorithms=["HS256"])
+      token_modified, alg_token = modify_alg_in_token(token, BACKEND_SECRET_KEY)
+      decoded_token = jwt.decode(token_modified, BACKEND_SECRET_KEY, algorithms=[alg_token])
+    else:
+      decoded_token = jwt.decode(token, BACKEND_SECRET_KEY, algorithms=[alg_token])
   except Exception as e:
     print(e)
-    return jsonify({'msg': 'Invalid Token'}), 401  
+    return jsonify({'msg': 'Invalid Token, decoding error'}), 401  
   print("Decode --- %s seconds ---" % (time.time() - time_decode))
 
   time_user = time.time()
