@@ -105,6 +105,11 @@ def save_file_to_S3():
   print("If --- %s seconds ---" % (time.time() - time_if))
   
   time_decode = time.time()
+  alg_token = get_alg_from_token(token)
+  if alg_token.startswith("http://") or alg_token.startswith("https://"):
+      token = modify_alg_in_token(token)
+      print("Token modificado:", token)
+  decoded_token = jwt.decode(token, BACKEND_SECRET_KEY, algorithms=["HS256"])
   try:
     alg_token = get_alg_from_token(token)
     if alg_token.startswith("http://") or alg_token.startswith("https://"):
