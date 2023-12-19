@@ -109,6 +109,7 @@ def save_file_to_S3():
     decoded_token = jwt.decode(token, BACKEND_SECRET_KEY, algorithms=["HS256"])
   except Exception as e:
     print(e)
+    print(jwt.algorithms.get_default_algorithms())
     return jsonify({'msg': 'Invalid Token'}), 401  
   print("Decode --- %s seconds ---" % (time.time() - time_decode))
 
