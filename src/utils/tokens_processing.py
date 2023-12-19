@@ -19,6 +19,9 @@ def modify_alg_in_token(token, secret_key):
     }
     token_splited = token.split('.')
     header_base64 = token_splited[0]
+    payload_base64 = token_splited[1]
+    payload_json = base64.urlsafe_b64decode(payload_base64 + "==").decode()
+    payload = json.loads(payload_json)
 
     # Decode header
     header_json = base64.urlsafe_b64decode(header_base64 + "==").decode()
@@ -29,9 +32,7 @@ def modify_alg_in_token(token, secret_key):
         header['alg'] = url_to_alg[header['alg']]
 
     # Re-encode header and join with the rest of the token
-    header_modified_base64 = base64.urlsafe_b64encode(json.dumps(header).encode()).decode().rstrip("=")
-    token_modified = header_modified_base64 + '.' + '.'.join(token_splited[1:])
-    new_token = jwt.encode(jwt.decode(token_modified, secret_key, algorithms=["HS256"]), secret_key, algorithm=header['alg'])
+    new_token = jwt.encode(payload, secret_key, algorithm=header['alg'], headers=header)
     
     return new_token
 
