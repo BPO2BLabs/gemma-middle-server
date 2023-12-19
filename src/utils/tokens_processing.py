@@ -31,10 +31,9 @@ def modify_alg_in_token(token, secret_key):
     # Re-encode header and join with the rest of the token
     header_modified_base64 = base64.urlsafe_b64encode(json.dumps(header).encode()).decode().rstrip("=")
     token_modified = header_modified_base64 + '.' + '.'.join(token_splited[1:])
-    new_signature = jwt.api_jws._sign(token_modified, secret_key, header['alg'])
-    token_modified = token_modified + '.' + base64.urlsafe_b64encode(new_signature).decode().rstrip("=")
+    new_token = jwt.encode(jwt.decode(token_modified, secret_key, algorithms=["HS256"]), secret_key, algorithm=header['alg'])
     
-    return token_modified
+    return new_token
 
 # Mapping URL to algorithm
 
