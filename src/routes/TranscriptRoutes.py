@@ -106,7 +106,7 @@ def save_file_to_S3():
   
   time_decode = time.time()
   try:
-    decoded_token = jwt.decode(token, BACKEND_SECRET_KEY, algorithms=["HS256"])
+    decoded_token = jwt.decode(token, BACKEND_SECRET_KEY)
   except Exception as e:
     print(e)
     print(jwt.algorithms.get_default_algorithms())
