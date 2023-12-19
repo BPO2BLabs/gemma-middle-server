@@ -1,5 +1,6 @@
 import base64
 import json
+import jwt
 
 def get_alg_from_token(token):
     token_split = token.split('.')
@@ -12,7 +13,7 @@ def get_alg_from_token(token):
     
     return header.get('alg')
 
-def modify_alg_in_token(token):
+def modify_alg_in_token(token, secret_key):
     url_to_alg = {
     "http://www.w3.org/2001/04/xmldsig-more#hmac-sha256": "HS256"
     }
@@ -30,6 +31,9 @@ def modify_alg_in_token(token):
     # Re-encode header and join with the rest of the token
     header_modified_base64 = base64.urlsafe_b64encode(json.dumps(header).encode()).decode().rstrip("=")
     token_modified = header_modified_base64 + '.' + '.'.join(token_splited[1:])
+    new_signature = jwt.api_jws._sign(token_modified, secret_key, header['alg'])
+    token_modified = token_modified + '.' + base64.urlsafe_b64encode(new_signature).decode().rstrip("=")
+    
     return token_modified
 
 # Mapping URL to algorithm
