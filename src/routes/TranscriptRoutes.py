@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from src.utils.WhisperAI import WhisperAI
+from src.utils.tokens_processing import modify_alg_in_token, get_alg_from_token
 import os
 import boto3
 import json
@@ -84,7 +85,6 @@ def save_to_S3():
 
 @main.route('/savefile', methods=['POST'])
 def save_file_to_S3():
-  print(S3_BUCKET)
   time_init = time.time()
   auth_header = request.headers.get('Authorization')
   if not auth_header:
@@ -106,7 +106,10 @@ def save_file_to_S3():
   
   time_decode = time.time()
   try:
-    decoded_token = jwt.decode(token, BACKEND_SECRET_KEY)
+    alg_token = get_alg_from_token(token)
+    if alg_token.startswith("http://") or alg_token.startswith("https://"):
+      token = modify_alg_in_token(token)
+    decoded_token = jwt.decode(token, BACKEND_SECRET_KEY, algorithms=["HS256"])
   except Exception as e:
     print(e)
     print(jwt.algorithms.get_default_algorithms())
