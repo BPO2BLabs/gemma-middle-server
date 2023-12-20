@@ -28,7 +28,7 @@ public_key = public_numbers.public_key(backend=default_backend())
 @main.route('/toorchestrator', methods=['GET'])
 def to_orchestrator():
     encrypted_pass = public_key.encrypt(
-        GEMMA_PASS.encode(),
+        GEMMA_PASS.encode('utf-8'),
         padding.OAEP(
             mgf=padding.MGF1(algorithm=hashes.SHA256()),
             algorithm=hashes.SHA256(),
