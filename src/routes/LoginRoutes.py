@@ -30,7 +30,7 @@ def to_orchestrator():
     }
     print(form_data)
     headers = {"Content-Type": "application/json"}
-    response = requests.post(f"{URL_BACKEND}/auth", data=form_data, headers=headers)
+    response = requests.post(f"{URL_BACKEND}/vauth", data=form_data, headers=headers)
     print(response.json())
     return jsonify(response.json())
     
