@@ -21,7 +21,7 @@ with open(PEM_PATH, "rb") as key_file:
         backend=default_backend()
     )
 
-@main.route('/toorchestrator', methods=['POST'])
+@main.route('/toorchestrator', methods=['GET'])
 def to_orchestrator():
     encrypted_pass = public_key.encrypt(
         GEMMA_PASS.encode(),
