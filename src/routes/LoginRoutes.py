@@ -28,6 +28,7 @@ def to_orchestrator():
         padding.OAEP(
             mgf=padding.MGF1(algorithm=hashes.SHA256()),
             algorithm=hashes.SHA256(),
+            label=None
         ),
     )
     form_data = {"username":GEMMA_USER,"password":encrypted_pass}
