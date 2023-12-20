@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import padding
+import base64
 
 load_dotenv()
 
@@ -31,7 +32,8 @@ def to_orchestrator():
             label=None
         ),
     )
-    form_data = {"userName":GEMMA_USER,"password":encrypted_pass.hex()}
+    encrypted_pass_b64 = base64.b64encode(encrypted_pass).decode('utf-8')
+    form_data = {"userName":GEMMA_USER,"password":encrypted_pass_b64}
     print(form_data)
     headers = {"Content-Type": "application/json"}
     response = requests.post(f"{URL_BACKEND}/auth", data=form_data, headers=headers)
