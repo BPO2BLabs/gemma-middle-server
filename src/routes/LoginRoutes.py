@@ -32,6 +32,7 @@ def to_orchestrator():
         ),
     )
     form_data = {"userName":GEMMA_USER,"password":encrypted_pass}
+    print(form_data)
     headers = {"Content-Type": "application/json"}
     response = requests.post(f"{URL_BACKEND}/auth", data=form_data, headers=headers)
     print(response)
