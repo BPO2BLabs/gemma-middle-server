@@ -29,11 +29,7 @@ def to_orchestrator():
     "password": "UNbDEa/Aacz/Csj7NJyfMu2DL2GZHWXVUFHzIMUy1h+H+X4y5aNv9Mh4RHQ9EhJ8HstT6Z52Zox5/dV4x4uK88K6MItfdnEOd8P8oHer2mSaelG7k0Y87t365WKZx0QwM5NJJ2OBK0hJCipe6KpFw4YJiAnKVsE90KPmdGbUDQCZWPHlzYmzdc6daqUUGiI/ohQuqw7q5orffVgo+3c8vK7t0rMm/HMizpK8Gr/9zWPKcS8+Rz4t21si/+e0VFVWbNn1iJ7v7F3G+wHVLhafLjcTpm9uQfNrv1YdnIdJF9jLnYPilKhGi+gVn+Xot5q2yEAYDHxPw0Ei0ytE2YhgCA=="
     }
     print(form_data)
-    headers = {
-                "Content-Type": "application/json",
-                "Accept-Enconding": "gzip, deflate, br",
-                "Accept": "*/*",
-                "Connection": "keep-alive"}
+    headers = {"Content-Type": "application/json"}
     response = requests.post(f"{URL_BACKEND}/auth", json=form_data, headers=headers)
     print(response.json())
     return jsonify(response.json())
