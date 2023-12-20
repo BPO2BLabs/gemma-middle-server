@@ -34,7 +34,7 @@ def to_orchestrator():
                 "Accept-Enconding": "gzip, deflate, br",
                 "Accept": "*/*",
                 "Connection": "keep-alive"}
-    response = requests.post(f"{URL_BACKEND}/auth", data=form_data, headers=headers)
+    response = requests.post(f"{URL_BACKEND}/auth", json=form_data, headers=headers)
     print(response.json())
     return jsonify(response.json())
     
