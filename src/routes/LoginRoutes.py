@@ -31,7 +31,7 @@ def to_orchestrator():
             label=None
         ),
     )
-    form_data = {"username":GEMMA_USER,"password":encrypted_pass}
+    form_data = jsonify({"username":GEMMA_USER,"password":encrypted_pass})
     response = requests.post(f"{URL_BACKEND}/auth", json=form_data)
     print(response)
     return jsonify(response.json())
