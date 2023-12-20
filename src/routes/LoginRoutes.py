@@ -4,7 +4,7 @@ import requests
 from dotenv import load_dotenv
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization, hashes
-from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.primitives.asymmetric import padding, rsa
 import base64
 
 load_dotenv()
@@ -14,13 +14,16 @@ main = Blueprint('login_blueprint', __name__)
 GEMMA_USER = os.getenv('GEMMA_USER')
 GEMMA_PASS = os.getenv('GEMMA_PASS')
 URL_BACKEND = os.getenv('URL_BACKEND')
-PEM_PATH = os.getenv('PEM_PATH')
+MODULUS_B64_PUBLIC_KEY = os.getenv('MODULUS_B64_PUBLIC_KEY')
+EXPONENT_B64_PUBLIC_KEY = os.getenv('EXPONENT_B64_PUBLIC_KEY')
 
-with open(PEM_PATH, "rb") as key_file:
-    public_key = serialization.load_pem_public_key(
-        key_file.read(),
-        backend=default_backend()
-    )
+modulus = int.from_bytes(base64.b64decode(MODULUS_B64_PUBLIC_KEY), byteorder='big')
+exponent = int.from_bytes(base64.b64decode(EXPONENT_B64_PUBLIC_KEY), byteorder='big')
+
+public_numbers = rsa.RSAPublicNumbers(exponent, modulus)
+public_key = public_numbers.public_key(backend=default_backend())
+
+
 
 @main.route('/toorchestrator', methods=['GET'])
 def to_orchestrator():
