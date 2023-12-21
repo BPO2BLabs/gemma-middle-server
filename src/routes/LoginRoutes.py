@@ -22,6 +22,7 @@ cipher = PKCS1_OAEP.new(public_key)
 
 @main.route('/toorchestrator', methods=['POST'])
 def to_orchestrator():
+    print(request.json)
     secret_password = request.json['secret_password']
     if secret_password != RUNPOD_PASS:
         return jsonify({"message": "Unauthorized"}), 401        
