@@ -121,6 +121,7 @@ def save_file_to_S3():
   print("User --- %s seconds ---" % (time.time() - time_user))
   print("Files --- %s seconds ---" % (time.time() - time_init))
 
+  companyId = request.form.get('companyId')
   unique_id = f"uploads/{str(uuid.uuid4())}"
   names_exist = []
   for file in files:
@@ -153,7 +154,7 @@ def save_file_to_S3():
   data_runpod = {
       "input": {
           "folder": unique_id,
-          "token_user": token
+          "companyId": companyId
       }
   }
   response = requests.post(url_runpod, json=data_runpod, headers=headers_runpod)
