@@ -155,7 +155,7 @@ def save_file_to_S3():
   data_runpod = {
       "input": {
           "folder": unique_id,
-          "companyId": companyId
+          "companyId": companyId,
           "createdBy": createdBy
       }
   }
