@@ -123,6 +123,7 @@ def save_file_to_S3():
 
   companyId = request.form.get('companyId')
   createdBy = request.form.get('createdBy')
+  print(createdBy)
   unique_id = f"uploads/{str(uuid.uuid4())}"
   names_exist = []
   for file in files:
